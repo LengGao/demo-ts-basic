@@ -1,6 +1,7 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist",
-        "target": "ES5"
-    }
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ES6",
+    "moduleResolution": "Node"
+  },
 }
