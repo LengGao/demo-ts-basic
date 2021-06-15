@@ -1,4 +1,4 @@
-interface Person {
+interface PersonInterface {
   readonly id: number // 只能在刚刚创建改变其值，同 final, const
   name: string
   age: number
@@ -6,7 +6,7 @@ interface Person {
   glrlfriends?: object
 }
 
-let person: Person = {id: 9527, name: 'gl', age: 18, family: [{father: 'father'}, {mother: 'mother'}, {brother: 'brother'}]  }
+let person: PersonInterface = {id: 9527, name: 'gl', age: 18, family: [{father: 'father'}, {mother: 'mother'}, {brother: 'brother'}]  }
 
 person.family[0] = {father: 'f father'}
 console.log("%c person: %c calamus.xyz %c ", 'color: red; ');
