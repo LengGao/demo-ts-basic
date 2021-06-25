@@ -132,7 +132,7 @@ console.log(greeterMaker, new greeterMaker().greet()); // [Function: Greeter] { 
       * @returns  子类实例
       */
     var extendStatics = function (d, b) {
-        // 执行环境兼容处理
+        // 执行环境兼容处理 ES5不支持setPrototypeOf
         if (Object.setPrototypeOf || ({ __proto__: [] } instanceof Array)) {
             // 将子类的原型__proto__指向父类构造器
             extendStatics = function (d, b) { d.__proto__ = b;}
