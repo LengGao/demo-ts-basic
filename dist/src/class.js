@@ -1,49 +1,28 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 /**
  * 修饰符 modifier
  * 结论：
  *  public 对所有开放，private 对定义该属性的类内部开放，protected 对定义该属性的类内部以及其后代类开放
  */
-var Animal = /** @class */ (function () {
-    function Animal(theName, age, shout) {
+class Animal {
+    constructor(theName, age, shout) {
         this.name = theName;
         this.age = age;
         this.shout = shout;
     }
-    Animal.prototype.move = function (distance) { console.log(this.name + "moved" + distance + "m\u3002"); };
-    return Animal;
-}());
-var Cat = /** @class */ (function (_super) {
-    __extends(Cat, _super);
-    function Cat(theName, age, shout) {
-        var _this = _super.call(this, theName, age, shout) || this;
-        _this.name = theName;
-        _this.shout = shout;
-        return _this;
+    move(distance) { console.log(`${this.name}moved${distance}m。`); }
+}
+class Cat extends Animal {
+    constructor(theName, age, shout) {
+        super(theName, age, shout); // TS中调用父类构造器需要传递其中必填参数, 因此我推断JS中类的继承是合并函数的作用域链
+        this.name = theName;
+        this.shout = shout;
     }
-    return Cat;
-}(Animal));
-var Tabby = /** @class */ (function (_super) {
-    __extends(Tabby, _super);
-    function Tabby(theName, age, shout) {
-        return _super.call(this, theName, age, shout) || this;
+}
+class Tabby extends Cat {
+    constructor(theName, age, shout) {
+        super(theName, age, shout);
     }
-    return Tabby;
-}(Cat));
+}
 // new Animal().name // is ok
 // new Animal().age // is error
 // new Animal().shout // is error
@@ -54,50 +33,39 @@ var Tabby = /** @class */ (function (_super) {
 /**
  * 存取器 getter setter
  */
-var Employee = /** @class */ (function () {
-    function Employee(petNmae) {
+class Employee {
+    constructor(petNmae) {
         this.petNmae = petNmae;
     }
-    Object.defineProperty(Employee.prototype, "fullName", {
-        get: function () {
-            return this.__fullName;
-        },
-        set: function (value) {
-            this.__fullName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Employee;
-}());
+    get fullName() {
+        return this.__fullName;
+    }
+    set fullName(value) {
+        this.__fullName = value;
+    }
+}
 Employee.facialFeatures = { face: '', eye: '', nose: '', ears: '', mouth: '' };
 // console.log(Employee.facialFeatures); // {face: '', eye: '', nose: '', ears: '', mouth: ''}
 /**
  * 抽象类：概念同JAVA
  */
-var Person = /** @class */ (function () {
-    function Person() {
-    }
-    Person.prototype.shout = function () { };
-    return Person;
-}());
+class Person {
+    shout() { }
+}
 /**
  * 实例部分与静态部分
  */
-var Greeter = /** @class */ (function () {
-    function Greeter() {
-    }
-    Greeter.prototype.greet = function () {
+class Greeter {
+    greet() {
         if (this.greeting) {
             return "Hello, " + this.greeting;
         }
         else {
             return Greeter.standardGreeting;
         }
-    };
-    Greeter.standardGreeting = "Hello, there";
-    return Greeter;
-}());
+    }
+}
+Greeter.standardGreeting = "Hello, there";
 var greeter; // 意思是Greeter类的实例的类型是 Greeter
 console.log(greeter, new Greeter().greet()); // undefined "Hello, there"
 var greeterMaker = Greeter; // 意思是将Greeter的构造函数赋值
@@ -132,7 +100,7 @@ var ClassDescribe = /** @class */ (function () {
     /* ---------------------- ClassDescribe end ---------------------- */
 });
 /**
- * 继承的实现
+ * 继承的实现 extends 只完成数据的继承不完成实例的创建
  */
 var __extends = (this && this.__extends) || (function () {
     /**
@@ -141,7 +109,7 @@ var __extends = (this && this.__extends) || (function () {
      * @returns  子类实例
      */
     var extendStatics = function (d, b) {
-        // 执行环境兼容处理
+        // 执行环境兼容处理 ES5不支持setPrototypeOf
         if (Object.setPrototypeOf || ({ __proto__: [] } instanceof Array)) {
             // 将子类的原型__proto__指向父类构造器
             extendStatics = function (d, b) { d.__proto__ = b; };
@@ -165,6 +133,10 @@ var __extends = (this && this.__extends) || (function () {
             throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b); // 完成数据继承
         function __() { this.constructor = d; } // this指向d，因为此时的d参数已经被改变，故而赋值d
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+        // 语法解释：表达式遇到运算符会先执行表达式进行求值，再进行运算
+        // (__.prototype = b.prototype, new __()) 表达式自执行，
+        // 同时经实验得出，js 引擎在通常情况下都会取最后进行运算的结果，
+        // 如：console.log( (__.prototype = b.prototype, new __()) ) 结果为__实例
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __()); // 这里还不是很理解
     };
 })();

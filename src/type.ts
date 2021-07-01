@@ -16,7 +16,7 @@ enum Enums { string, number, boolean = 3 } // 相似于map，set 集合 可通�
 let enums: Enums = Enums.string || Enums.boolean,
     obj: Object = { name: Enums[0] }
 
-
+// any 任一类型，void 无任何类型，never 永不存在的值的类型
 let anys: any = Enums[1],
     func_void = (): void => undefined,
     func_never = (): never => { throw new Error() };
