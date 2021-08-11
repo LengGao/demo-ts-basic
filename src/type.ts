@@ -33,5 +33,37 @@ console.log(`TS类型；'\n'
   类型推断：(<type> variable), (variable as type)
 `);
 
+/** 类型推论 —— 通用类型算法*/
+class Animals {}
+class Rhino extends Animals{}
+class Elephant extends Animals{}
+class Snake extends Animals{}
 
+let x = [0, 1, null]
+// 当候选类型共享相同的通用类型，但没有一个类型能为所有候选类型的类型
+// 如：让下面推断为Animals，这个时候需明确指出
+// 如果没有找到最佳通用类型的话，类型推断的结果A为联合数组类型，(Rhino | Elephant | Snake)[]。
+let zoo: Animals[] = [new Rhino(), new Elephant(), new Snake()];
 
+window.onmousedown = function(e: MouseEvent) {
+    console.log(e.button)
+}
+
+/**
+ * TS中的类型兼容性是基于结构子类型的
+ * 类型系统（即强类型与弱类型）：
+ *  1，基于结构类型的类型系统：数据兼容性或等价性需要通过明确声明来确定
+ *  2，基于名义类型的类型系统：数据兼容性或等价性不需要通过明确声明来确定
+ * 结构类型：一种只使用其成员来描述类型的方式，
+ * 名义类型：一种通过明确的声明或类型名称来描述类型的方式。
+ */
+interface unreliableTypeSystem {
+    id: number;
+    name: string;
+    age: number;
+}
+let a: unreliableTypeSystem;
+let b = {id: 1, name: "zs", age: 1}
+let c = {name: "ls"}
+// a = b; ok
+// a = c; error
