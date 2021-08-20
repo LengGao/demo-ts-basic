@@ -1,5 +1,5 @@
 // 函数完整类型定义：参数类型与返回值类型
-var myAdd = function (x, y) { return x + y; };
+let myAdd = function (x, y) { return x + y; };
 /**
  * 在TS中，函数的参数同样被分为；必选参数、可选参数、默认参数、剩余参数几种类型，未设值的参数同样为void 0
  * 不过可选参数与默认参数有些异同；
@@ -8,19 +8,9 @@ var myAdd = function (x, y) { return x + y; };
  * 剩余参数会编译成以同剩余参数名同名的变量通过arguments遍历收集剩余参数
  */
 function bildName(firstName, lastName) { return firstName + lastName; }
-function bildName2(firstName, lastName) {
-    if (firstName === void 0) { firstName = 'z'; }
-    if (lastName === void 0) { lastName = 's'; }
-    return firstName + lastName;
-}
+function bildName2(firstName = 'z', lastName = 's') { return firstName + lastName; }
 function bildName3(firstName, lastName) { return firstName + lastName; }
-function bildName4(firstName) {
-    var nextName = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        nextName[_i - 1] = arguments[_i];
-    }
-    return firstName + nextName.join(' ');
-}
+function bildName4(firstName, ...nextName) { return firstName + nextName.join(' '); }
 bildName('l', '');
 bildName3('z');
 bildName4('z', 's');
@@ -36,46 +26,42 @@ function bildName4(firstName) {
 // 若this来自对象字面量里的函数表达式。 修改的方法是，提供一个显式的 this参数。 this参数是个假的参数，它出现在参数列表的最前面，否则会产生一个警告
 // 但同时this: void会引起类型问题
 // 针对第一类情况：this参数
-var deck = {
+let deck = {
     suits: ["hearts", "spades", "clubs", "diamonds"],
     cards: Array(52),
     createCardPicker: function () {
-        var _this = this;
         // return function () { 
-        return function () {
-            var pickedCard = Math.floor(Math.random() * 52);
-            var pickedSuit = Math.floor(pickedCard / 13);
-            return { suit: _this.suits[pickedSuit], card: pickedCard % 13 }; // this.suits[pickedSuit]里的this的类型为any
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+            return { suit: this.suits[pickedSuit], card: pickedCard % 13 }; // this.suits[pickedSuit]里的this的类型为any
         };
     }
 };
-var cardPicker = deck.createCardPicker();
-var pickedCard = cardPicker();
-var deck2 = {
+let cardPicker = deck.createCardPicker();
+let pickedCard = cardPicker();
+let deck2 = {
     suits: ["hearts", "spades", "clubs", "diamonds"],
     cards: Array(52),
     // NOTE: The function now explicitly specifies that its callee must be of type Deck
     createCardPicker: function () {
-        var _this = this;
-        return function () {
-            var pickedCard = Math.floor(Math.random() * 52);
-            var pickedSuit = Math.floor(pickedCard / 13);
-            return { suit: _this.suits[pickedSuit], card: pickedCard % 13 };
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+            return { suit: this.suits[pickedSuit], card: pickedCard % 13 };
         };
     }
 };
-var uiElement = { addClickListener: function () { } };
-var Handler = /** @class */ (function () {
-    function Handler() {
-        var _this = this;
+let uiElement = { addClickListener() { } };
+class Handler {
+    constructor() {
         this.info = 'test';
-        this.onClickBack3 = function (e) { _this.info = e.type; };
+        this.onClickBack3 = (e) => { this.info = e.type; };
     }
-    Handler.prototype.onClickBack = function (e) { this.info = e.type; };
-    Handler.prototype.onClickBack2 = function (e) { console.log('意味着不能使用this'); };
-    return Handler;
-}());
-var hander = new Handler();
+    onClickBack(e) { this.info = e.type; }
+    onClickBack2(e) { console.log('意味着不能使用this'); }
+}
+let hander = new Handler();
 // uiElement.addClickListener(hander.onClickBack) error this's type is void
 uiElement.addClickListener(hander.onClickBack2); // 不可使用this
 uiElement.addClickListener(hander.onClickBack3);
@@ -102,27 +88,25 @@ uiElement.addClickListener(hander.onClickBack3);
  * JS由于没有函数签名而需要采用变通方法实现重载————arugments不同长度处理
  * TS从语法上帮助开发者实现更简洁的写法
  */
-var User = /** @class */ (function () {
-    function User(name, value) {
+class User {
+    constructor(name, value) {
         this.name = name;
         this.value = value;
     }
-    return User;
-}());
-var Data = /** @class */ (function () {
-    function Data() {
+}
+class Data {
+    constructor() {
         this.values = [];
     }
-    Data.prototype.register = function (name, value) {
+    register(name, value) {
         if (name instanceof User) {
             this.values.push(name);
         }
         else {
             this.values.push(new User(name, value));
         }
-    };
-    return Data;
-}());
+    }
+}
 function reverse(x) {
     return x.length;
 }

@@ -16,8 +16,8 @@ function identity4(arg) {
 }
 identity4('s');
 function identity5(arg) {
-    var a;
-    var b;
+    let a;
+    let b;
     // a = parseInt(arg) //error
     // Math.floor(arg) error
     // let c = <T>arg // error
