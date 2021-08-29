@@ -9,7 +9,7 @@ let sq = new polygons.Square(); // Same as "new Shapes.Polygons.Square()"
 // import会生成与原始符号不同的引用，所以改变别名的var值并不会影响原始变量的值
     
 
-
+    
 /**注意
  * 当涉及到多文件时，我们必须确保所有编译后的代码都被加载了。 我们有两种方式
  * 第一种方式，把所有的输入文件编译为一个输出文件，需要使用--outFile标记：
