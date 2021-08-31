@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/LengGao/demo-ts-basic/issues"
   },
-  "homepage": "https://github.com/LengGao/demo-ts-basic#readme"
+  "homepage": "https://github.com/LengGao/demo-ts-basic#readme",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
 }

@@ -41,3 +41,15 @@ for (let s of _strings) {
         console.log(`'${s}' ${isMatch ? "matches" : "does not match"} '${name}'.`);
     }
 }
+var Shapes;
+(function (Shapes) {
+    let Polygons;
+    (function (Polygons) {
+        class Triangle {
+        }
+        Polygons.Triangle = Triangle;
+        class Square {
+        }
+        Polygons.Square = Square;
+    })(Polygons = Shapes.Polygons || (Shapes.Polygons = {}));
+})(Shapes || (Shapes = {}));

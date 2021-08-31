@@ -3,6 +3,7 @@
     "outDir": "dist",
     "target": "ES6",
     // "noImplicitThis": true, 检查this
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "experimentalDecorators": true
   },
 }
